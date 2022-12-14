@@ -17,28 +17,55 @@ In your SwiftUI code, import the HorizontalTileLayout library by adding the foll
 ```
 To create a horizontal tile layout, use the HorizontalTileLayout view and pass it an array of views to be laid out horizontally. For example:
 ```swift
-    HorizontalTileLayout(views: [
-        Text("Item 1"),
-        Text("Item 2"),
-        Text("Item 3")
-    ])
+    ScrollView(.horizontal) {
+        HorizontalTileLayout(templates: self.restaurantsLayout) {
+            ForEach(restaurants) { food in
+                RestaurantItemView(food: food)
+                    .padding(1)
+            }
+        }
+    }
+    .scrollIndicators(.hidden)
 ```
 By default, the views will be laid out horizontally with equal widths. You can customize the widths by passing a widths array to the HorizontalTileLayout view. For example:
 ```swift
-    HorizontalTileLayout(views: [
-        Text("Item 1"),
-        Text("Item 2"),
-        Text("Item 3")
-    ], widths: [.fixed(100), .flexible, .fixed(200)])
+   public var restaurantsLayout: [HorizontalTileLayout.DisplayType] {
+		(0..<restaurants.count).map({_ in randomTile()})
+   }
 ```
 In this example, "Item 1" will have a fixed width of 100 points, "Item 2" will have a flexible width that takes up the remaining space, and "Item 3" will have a fixed width of 200 points.
 
 You can also customize the spacing between the views by passing a spacing parameter to the HorizontalTileLayout view. For example:
 ```swift
-    HorizontalTileLayout(views: [
-        Text("Item 1"),
-        Text("Item 2"),
-        Text("Item 3")
-    ], spacing: 16)
+   private func randomTile() -> HorizontalTileLayout.DisplayType {
+		switch (0...2)
+			.randomElement() {
+		case 0: return .doubleInColumn
+		case 1: return .full(width: CGFloat((200...300).randomElement()!))
+		default: return .sqaure
+		}
+	}
 ```
 In this example, the
+
+```swift 
+ScrollView(.horizontal) {
+    HorizontalTileLayout {
+        StandardSqaureTile {
+            RestaurantItemView(food: restaurants[0])
+                .padding(1)
+        }
+
+        StandardSqaureTile {
+            RestaurantItemView(food: restaurants[1])
+                .padding(1)
+        }
+
+        CustomTile(width: 300) {
+            RestaurantItemView(food: restaurants[2])
+                .padding(1)
+        }
+    }
+}
+.scrollIndicators(.hidden)
+```
