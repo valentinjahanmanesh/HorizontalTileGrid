@@ -14,6 +14,6 @@ public struct StandardSqaureTile<Content: View> : View {
 
 	public var body: some View {
 		content()
-			.layoutValue(key: HorizontalTileDisplayKey.self, value: .sqaure)
+			.layoutValue(key: HorizontalTileDisplayKey.self, value: .fullSquare)
 	}
 }

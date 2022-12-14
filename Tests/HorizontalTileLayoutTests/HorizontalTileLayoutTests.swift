@@ -2,7 +2,7 @@ import XCTest
 @testable import HorizontalTileLayout
 final class HorizontalTileLayoutTests: XCTestCase {
 	func testStandardSqaureShouldBeAbleToContainFourMinimumSqaureSize() {
-		let templates: [HorizontalTileLayout.DisplayType] = [.doubleInColumn, .doubleInColumn, .doubleInColumn]
+		let templates: [HorizontalTileLayout.DisplayType] = [.halfSquare, .halfSquare, .halfSquare]
 		let sut = HorizontalTileLayout(templates: templates)
 		let minimumSqaure: CGSize = .init(width: 100, height: 100)
 		let cache: HorizontalTileLayout.Cache = (standardSquare: sut.standardSqaureSize(from: minimumSqaure), minimumSqaure: minimumSqaure)
@@ -13,28 +13,28 @@ final class HorizontalTileLayoutTests: XCTestCase {
 
 	// MARK: doubleInColumn
 	func test_shouldCalculateSizeOfTheContainerCorrectly_whenTheNumberOfTilesIsLessOrEqual4Double() {
-		var templates: [HorizontalTileLayout.DisplayType] = [.doubleInColumn, .doubleInColumn, .doubleInColumn]
+		var templates: [HorizontalTileLayout.DisplayType] = [.halfSquare, .halfSquare, .halfSquare]
 		let sut = HorizontalTileLayout(templates: templates)
 		let minimumSqaure: CGSize = .init(width: 100, height: 100)
 		var cache: HorizontalTileLayout.Cache = (standardSquare: sut.standardSqaureSize(from: minimumSqaure), minimumSqaure: minimumSqaure)
 		let sizeToContain3DoubleColumn = sut.sizeThatFitsTemplates(proposal: .init(width: 100, height: 100), templates: templates, cache: &cache)
 		XCTAssertEqual(sizeToContain3DoubleColumn, cache.standardSquare)
 
-		templates = [.doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn]
+		templates = [.halfSquare, .halfSquare, .halfSquare, .halfSquare]
 		let sizeToContain4DoubleColumn = sut.sizeThatFitsTemplates(proposal: .init(width: 100, height: 100), templates: templates, cache: &cache)
 		XCTAssertEqual(sizeToContain4DoubleColumn, cache.standardSquare)
 
-		templates = [.doubleInColumn, .doubleInColumn]
+		templates = [.halfSquare, .halfSquare]
 		let sizeToContain2DoubleColumn = sut.sizeThatFitsTemplates(proposal: .init(width: 100, height: 100), templates: templates, cache: &cache)
 		XCTAssertEqual(sizeToContain2DoubleColumn, .init(width: cache.minimumSqaure.width, height: cache.standardSquare.height))
 
-		templates = [.doubleInColumn]
+		templates = [.halfSquare]
 		let sizeToContain1DoubleColumn = sut.sizeThatFitsTemplates(proposal: .init(width: 100, height: 100), templates: templates, cache: &cache)
 		XCTAssertEqual(sizeToContain1DoubleColumn, .init(width: cache.minimumSqaure.width, height: cache.standardSquare.height))
 	}
 
 	func test_shouldCalculateSizeOfTheContainerCorrectly_whenTheNumberOfTilesIsOdd() {
-		let templates: [HorizontalTileLayout.DisplayType] = [.doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn]
+		let templates: [HorizontalTileLayout.DisplayType] = [.halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare]
 		let sut = HorizontalTileLayout(templates: templates)
 		let minimumSqaure: CGSize = .init(width: 100, height: 100)
 		var cache: HorizontalTileLayout.Cache = (standardSquare: sut.standardSqaureSize(from: minimumSqaure), minimumSqaure: minimumSqaure)
@@ -43,7 +43,7 @@ final class HorizontalTileLayoutTests: XCTestCase {
 	}
 
 	func test_shouldCalculateSizeOfTheContainerCorrectly_whenTheNumberOfTilesIsEvenButNotDevidableBy4() {
-		let templates: [HorizontalTileLayout.DisplayType] = [.doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn]
+		let templates: [HorizontalTileLayout.DisplayType] = [.halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare]
 		let sut = HorizontalTileLayout(templates: templates)
 		let minimumSqaure: CGSize = .init(width: 100, height: 100)
 		var cache: HorizontalTileLayout.Cache = (standardSquare: sut.standardSqaureSize(from: minimumSqaure), minimumSqaure: minimumSqaure)
@@ -53,7 +53,7 @@ final class HorizontalTileLayoutTests: XCTestCase {
 
 	// MARK: StandardSize
 	func test_shouldCalculateSizeOfTheContainerCorrectly_whenTemplatesContainsOnlySingleStandard() {
-		let templates: [HorizontalTileLayout.DisplayType] = [.sqaure, .sqaure, .sqaure, .sqaure, .sqaure, .sqaure, .sqaure, .sqaure, .sqaure, .sqaure, .sqaure, .sqaure]
+		let templates: [HorizontalTileLayout.DisplayType] = [.fullSquare, .fullSquare, .fullSquare, .fullSquare, .fullSquare, .fullSquare, .fullSquare, .fullSquare, .fullSquare, .fullSquare, .fullSquare, .fullSquare]
 		let sut = HorizontalTileLayout(templates: templates)
 		let minimumSqaure: CGSize = .init(width: 100, height: 100)
 		var cache: HorizontalTileLayout.Cache = (standardSquare: sut.standardSqaureSize(from: minimumSqaure), minimumSqaure: minimumSqaure)
@@ -74,7 +74,7 @@ final class HorizontalTileLayoutTests: XCTestCase {
 
 	// MARK: Mix of tiles
 	func test_shouldCalculateSizeOfTheContainerCorrectly_whenTemplatesContainsMixOfTiles() {
-		let templates: [HorizontalTileLayout.DisplayType] = [.full(width: 100), .sqaure, .sqaure, .doubleInColumn, .doubleInColumn, .doubleInColumn, .sqaure, .full(width: 430),.full(width: 540), .doubleInColumn, .doubleInColumn, .sqaure,.doubleInColumn, .sqaure, .doubleInColumn, .doubleInColumn, .doubleInColumn, .doubleInColumn,]
+		let templates: [HorizontalTileLayout.DisplayType] = [.full(width: 100), .fullSquare, .fullSquare, .halfSquare, .halfSquare, .halfSquare, .fullSquare, .full(width: 430),.full(width: 540), .halfSquare, .halfSquare, .fullSquare,.halfSquare, .fullSquare, .halfSquare, .halfSquare, .halfSquare, .halfSquare,]
 		let sut = HorizontalTileLayout(templates: templates)
 		let minimumSqaure: CGSize = .init(width: 100, height: 100)
 		var cache: HorizontalTileLayout.Cache = (standardSquare: sut.standardSqaureSize(from: minimumSqaure), minimumSqaure: minimumSqaure)
@@ -100,7 +100,7 @@ final class HorizontalTileLayoutTests: XCTestCase {
 
 	func test_shouldPlaceTheItemsCorrectly_whenOnlySquareItemsInside() {
 		let tileWidth: [CGFloat] = [200,200,200,200,200]
-		let templates: [HorizontalTileLayout.DisplayType] = tileWidth.map({_ in .sqaure})
+		let templates: [HorizontalTileLayout.DisplayType] = tileWidth.map({_ in .fullSquare})
 		let sut = HorizontalTileLayout(templates: templates)
 		let minimumSqaure: CGSize = .init(width: 100, height: 100)
 		var cache: HorizontalTileLayout.Cache = (standardSquare: sut.standardSqaureSize(from: minimumSqaure), minimumSqaure: minimumSqaure)
@@ -116,7 +116,7 @@ final class HorizontalTileLayoutTests: XCTestCase {
 	func test_shouldPlaceTheItemsCorrectly_whenOnlyDoubleItemsInside() {
 		let minimumSqaure: CGSize = .init(width: 100, height: 100)
 		let tileWidth: [CGFloat] = [minimumSqaure.width,minimumSqaure.width, minimumSqaure.width, minimumSqaure.width, minimumSqaure.width, minimumSqaure.width, minimumSqaure.width]
-		let templates: [HorizontalTileLayout.DisplayType] = tileWidth.map({_ in .doubleInColumn})
+		let templates: [HorizontalTileLayout.DisplayType] = tileWidth.map({_ in .halfSquare})
 		let sut = HorizontalTileLayout(templates: templates)
 
 		var cache: HorizontalTileLayout.Cache = (standardSquare: sut.standardSqaureSize(from: minimumSqaure), minimumSqaure: minimumSqaure)
@@ -135,7 +135,7 @@ final class HorizontalTileLayoutTests: XCTestCase {
 	func test_shouldPlaceTheItemsCorrectly_whenAMixOfTileItemsInside() {
 		let minimumSqaure: CGSize = .init(width: 100, height: 100)
 		let tileWidth: [CGFloat] = [minimumSqaure.width, minimumSqaure.width, minimumSqaure.width]
-		let templates: [HorizontalTileLayout.DisplayType] = tileWidth.map({_ in .doubleInColumn}) + [.sqaure, .full(width: 200), .doubleInColumn, .full(width: 242)]
+		let templates: [HorizontalTileLayout.DisplayType] = tileWidth.map({_ in .halfSquare}) + [.fullSquare, .full(width: 200), .halfSquare, .full(width: 242)]
 		let sut = HorizontalTileLayout(templates: templates)
 
 		var cache: HorizontalTileLayout.Cache = (standardSquare: sut.standardSqaureSize(from: minimumSqaure), minimumSqaure: minimumSqaure)
@@ -154,7 +154,7 @@ final class HorizontalTileLayoutTests: XCTestCase {
 	func test_shouldPlaceTheItemsCorrectly_whenAMixOfTileItemsInsideAndContainerMinXIsNotZero() {
 		let minimumSqaure: CGSize = .init(width: 100, height: 100)
 		let tileWidth: [CGFloat] = [minimumSqaure.width, minimumSqaure.width, minimumSqaure.width]
-		let templates: [HorizontalTileLayout.DisplayType] = tileWidth.map({_ in .doubleInColumn}) + [.sqaure, .full(width: 200), .doubleInColumn, .full(width: 242)]
+		let templates: [HorizontalTileLayout.DisplayType] = tileWidth.map({_ in .halfSquare}) + [.fullSquare, .full(width: 200), .halfSquare, .full(width: 242)]
 		let sut = HorizontalTileLayout(templates: templates)
 
 		var cache: HorizontalTileLayout.Cache = (standardSquare: sut.standardSqaureSize(from: minimumSqaure), minimumSqaure: minimumSqaure)

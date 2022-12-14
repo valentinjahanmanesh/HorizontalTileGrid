@@ -13,10 +13,11 @@ import SwiftUI
 /// **Full(width: CGFloat)**:
 /// 	This subview will have a custom width. it will fill the HorizontalTileLayout and a width eqal to the provided value.
 ///
-/// **DoubleInColumn**:
-/// 	If a subview is of type doubled in a column, the height of the HorizontalTileLayout devided in half and layout tries to add the subviews based on the order to the top and bottom availabled space. Layout would always start from top half, adds the suview to the top half and goes to the next view, if the next item is a doubleInColumn again, the layout adds this new item in the bottom half, but if the next item is not of doubleInColumn display type, the bottom half would be empty
+/// **HalfSquare**:
+/// 	If a subview is of type HalfSquare, Layout devides the available height in half and places the item on top or bottom space based on the order of appreance of the item in list. Layout would always start from top half, places the suview on the top half and goes to the next view, if the next item is a another halfSqure again, the layout places the new item in the bottom half, but if the next item is not of halfSqure display type, the bottom half would be empty
 ///
-///	**Sqaure**:
+///	**FullSqaure**:
+///		This display type is a standard sqaure and provides a space of Width=Height=HorizontalTileLayout height.
 ///		This display type is a standard sqaure and provides a space of Width=Height=HorizontalTileLayout height.
 ///
 public struct HorizontalTileLayout: Layout {
@@ -42,7 +43,7 @@ public struct HorizontalTileLayout: Layout {
 	public typealias Cache = (standardSquare: CGSize, minimumSqaure: CGSize)
 
 	/// Caclulates and returns the size of the standard square
-	/// - Parameter minimumSqaureSize: size of the smallest displayable sqaure in the layout. This is the size of one of the sqaures in **doubleInColumn** display type and ``BlockTile``.
+	/// - Parameter minimumSqaureSize: size of the smallest displayable sqaure in the layout. This is the size of one of the sqaures in **halfSqure** display type and ``BlockTile``.
 	/// - Returns: the size of the standard sqaure. This size will be use for displaying the **Sqaure** display type and ``StandardSqaureTile``
 	func standardSqaureSize(from minimumSqaureSize: CGSize) -> CGSize {
 		return CGSize(width: minimumSqaureSize.width * 2, height: minimumSqaureSize.height * 2)
@@ -60,7 +61,7 @@ public struct HorizontalTileLayout: Layout {
 	}
 
 
-	/// Calculates the smallest subview's height. This height indicates the height of the sqaure in **doubleInColumn** display type and ``BlockTile``.
+	/// Calculates the smallest subview's height. This height indicates the height of the sqaure in **halfSqure** display type and ``BlockTile``.
 	/// - Parameter sizes: list of sizes of the subviews
 	/// - Returns: height of the smallest tile in the layout
 	func minheight(of sizes: [CGSize]) -> CGFloat {
@@ -83,14 +84,14 @@ public struct HorizontalTileLayout: Layout {
 			case .full(let width):
 				isNextDouble = false
 				return width
-			case .doubleInColumn:
+			case .halfSquare:
 				if isNextDouble {
 					isNextDouble = false
 					return 0
 				}
 				isNextDouble = true
 				return  minimumSqaureSize.height
-			case .sqaure:
+			case .fullSquare:
 				isNextDouble = false
 				return standardSqaureSize.width
 			}
@@ -135,7 +136,7 @@ public struct HorizontalTileLayout: Layout {
 			let point: CGPoint
 			let size: CGSize
 			switch templates[templateIndex] {
-			case .doubleInColumn:
+			case .halfSquare:
 				size = CGSize(width: minimumSqaureSize.width, height: minimumSqaureSize.height)
 				if let nextSlotPoint = nextCellInDoubledColumnPosition {
 					point = nextSlotPoint
@@ -152,7 +153,7 @@ public struct HorizontalTileLayout: Layout {
 				size = CGSize(width: width, height: standardSqaureSize.height)
 				point = CGPoint(x: traversedX + width.half, y: bounds.midY)
 				traversedX += width
-			case .sqaure:
+			case .fullSquare:
 				nextCellInDoubledColumnPosition = nil
 				size = CGSize(width: standardSqaureSize.width, height: standardSqaureSize.height)
 				point = CGPoint(x: traversedX + standardSqaureSize.width.half, y: bounds.minY + standardSqaureSize.height.half)

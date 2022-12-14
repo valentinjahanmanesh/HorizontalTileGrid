@@ -15,6 +15,6 @@ public struct BlockTile<Content: View> : View {
 
 	public var body: some View {
 		content()
-			.layoutValue(key: HorizontalTileDisplayKey.self, value: .doubleInColumn)
+			.layoutValue(key: HorizontalTileDisplayKey.self, value: .halfSquare)
 	}
 }
