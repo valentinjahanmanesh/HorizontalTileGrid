@@ -1,12 +1,12 @@
 //
-//  BlockTile.swift
+//  HalfBlockTile.swift
 //  
 //
 //  Created by Farshad Macbook M1 Pro on 12/13/22.
 //
 
 import SwiftUI
-public struct BlockTile<Content: View> : View {
+public struct HalfBlockTile<Content: View> : View {
 	@ViewBuilder
 	private var content: ()-> Content
 	public init(@ViewBuilder builder: @escaping () -> Content) {
@@ -15,6 +15,6 @@ public struct BlockTile<Content: View> : View {
 
 	public var body: some View {
 		content()
-			.layoutValue(key: HorizontalTileDisplayKey.self, value: .halfSquare)
+			.layoutValue(key: BlockTypeKey.self, value: .block)
 	}
 }

@@ -1,12 +1,12 @@
 //
-//  StandardSquareTile.swift
+//  FullBlockTile.swift
 //  
 //
 //  Created by Farshad Macbook M1 Pro on 12/13/22.
 //
 
 import SwiftUI
-public struct StandardSquareTile<Content: View> : View {
+public struct FullBlockTile<Content: View> : View {
 	@ViewBuilder var content: () -> Content
 	public init(@ViewBuilder builder: @escaping () -> Content) {
 		self.content = builder
@@ -14,6 +14,6 @@ public struct StandardSquareTile<Content: View> : View {
 
 	public var body: some View {
 		content()
-			.layoutValue(key: HorizontalTileDisplayKey.self, value: .fullSquare)
+			.layoutValue(key: BlockTypeKey.self, value: .full)
 	}
 }
