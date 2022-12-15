@@ -29,7 +29,7 @@ public struct HorizontalTileLayout: Layout {
 		self.blocks = blocks
 	}
 
-
+	/// Collects the size of all the child views (Proxy instances). Each proxy has a sizeThatFits function which accepts a proposed size, In SwiftUI, views choose their own size, but can take a size proposal from their parent view into account when doing so. above, I didn’t specify any particular size to the child view so I can get the ideal size of each child view.
 	/// Calculates the size of the subviews and returns the a list of sizes which indicates how much space each subview needs to be able to show it's contents.
 	/// - Parameter subviews: an array of subview proxies
 	/// - Returns: list of CGSizes that would indicates the size of the subview
@@ -63,7 +63,7 @@ public struct HorizontalTileLayout: Layout {
 	/// Calculates the smallest subview's height. This height indicates the height of the square in **half** display type and ``HalfBlockTile``.
 	/// - Parameter sizes: list of sizes of the subviews
 	/// - Returns: height of the smallest tile in the layout
-	func minheight(of sizes: [CGSize]) -> CGFloat {
+	func minimumHeight(of sizes: [CGSize]) -> CGFloat {
 		return sizes.map({item in max(item.width, item.height)})
 			.max(by: {$0 < $1}) ?? 1
 	}
@@ -77,21 +77,21 @@ public struct HorizontalTileLayout: Layout {
 	/// - Returns: minimum required size of the layout view
 	func sizeThatFitsBlocks(proposal: ProposedViewSize, blocks: [BlockType], cache: inout Cache) -> CGSize {
 		let (standardSquareSize, minimumSquareSize) = cache
-		var isNextDouble: Bool = false
+		var isNextABlock: Bool = false
 		let widthNeeded = blocks.map { tmp in
 			switch tmp {
 			case .fullCustom(let width):
-				isNextDouble = false
+				isNextABlock = false
 				return width
 			case .block:
-				if isNextDouble {
-					isNextDouble = false
+				if isNextABlock {
+					isNextABlock = false
 					return 0
 				}
-				isNextDouble = true
+				isNextABlock = true
 				return  minimumSquareSize.height
 			case .full:
-				isNextDouble = false
+				isNextABlock = false
 				return standardSquareSize.width
 			}
 		}
@@ -115,7 +115,7 @@ public struct HorizontalTileLayout: Layout {
 	/// half size
 	private func minimumSquareSize(toFit subviews: Subviews) -> CGSize {
 		let sizes = sizes(of: subviews)
-		let minHeight = minheight(of: sizes)
+		let minHeight = minimumHeight(of: sizes)
 		return .init(width: minHeight, height: minHeight)
 	}
 
