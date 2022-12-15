@@ -1,6 +1,6 @@
 ![Simulator Screen Recording - iPhone 14 - 2022-12-14 at 00](https://user-images.githubusercontent.com/13612410/207546510-d40ac8e1-7a02-4014-9293-74b8452a25a8.gif)
 
-HorizontalTileLayout is a SwiftUI view that layouts it's subviews horizontally like a list of tiles based on the subview display type and custom width.
+HorizontalTileLayout is a SwiftUI view that layouts its subviews horizontally like a list of tiles based on the each subview display type and custom width.
 
 # How To Use
 
@@ -50,7 +50,7 @@ You can also customize the spacing between the views by passing a spacing parame
 			.randomElement() {
 		case 0: return .doubleInColumn
 		case 1: return .full(width: CGFloat((200...300).randomElement()!))
-		default: return .sqaure
+		default: return .square
 		}
 	}
 ```
@@ -60,12 +60,12 @@ In this example, the
 ```swift
 ScrollView(.horizontal) {
     HorizontalTileLayout {
-        StandardSqaureTile {
+        StandardSquareTile {
             RestaurantItemView(food: restaurants[0])
                 .padding(1)
         }
 
-        StandardSqaureTile {
+        StandardSquareTile {
             RestaurantItemView(food: restaurants[1])
                 .padding(1)
         }

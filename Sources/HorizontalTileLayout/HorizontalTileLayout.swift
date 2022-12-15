@@ -11,21 +11,21 @@ import SwiftUI
 ///
 ///
 /// **Full(width: CGFloat)**:
-/// 	This subview will have a custom width. it will fill the HorizontalTileLayout and a width eqal to the provided value.
+/// 	This subview will have a custom width. it will fill the HorizontalTileLayout and a width equal to the provided value.
 ///
 /// **HalfSquare**:
-/// 	If a subview is of type HalfSquare, Layout devides the available height in half and places the item on top or bottom space based on the order of appreance of the item in list. Layout would always start from top half, places the suview on the top half and goes to the next view, if the next item is a another halfSqure again, the layout places the new item in the bottom half, but if the next item is not of halfSqure display type, the bottom half would be empty
+/// 	If a subview is of type HalfSquare, Layout divides the available height in half and places the item on top or bottom space based on the order of appearance of the item in list. Layout would always start from top half, places the subview on the top half and goes to the next view, if the next item is a another halfSquare again, the layout places the new item in the bottom half, but if the next item is not of halfSquare display type, the bottom half would be empty
 ///
-///	**FullSqaure**:
-///		This display type is a standard sqaure and provides a space of Width=Height=HorizontalTileLayout height.
-///		This display type is a standard sqaure and provides a space of Width=Height=HorizontalTileLayout height.
+///	**FullSquare**:
+///		This display type is a standard square and provides a space of Width=Height=HorizontalTileLayout height.
+///		This display type is a standard square and provides a space of Width=Height=HorizontalTileLayout height.
 ///
 public struct HorizontalTileLayout: Layout {
 	private let templates: [DisplayType]?
 
 
-	/// Initialize the layout with an optional array of the display types. if the arrays is null, the layout expects it's subviews to be one of these three views ``BlockTile``, ``CustomTile``, ``StandardSqaureTile`` or a custom view with ``HorizontalTileDisplayKey`` LayoutValueKey.
-	/// - Parameter templates: an optional array of display types, in case of present of display type array, the subviews of the layout can be any view, and the number of visible items would be eqaual to number of item in DisplayType array. It means that the layout would only display the views that has one representation display type inside the DisplayType array.
+	/// Initialize the layout with an optional array of the display types. if the arrays is null, the layout expects it's subviews to be one of these three views ``BlockTile``, ``CustomTile``, ``StandardSquareTile`` or a custom view with ``HorizontalTileDisplayKey`` LayoutValueKey.
+	/// - Parameter templates: an optional array of display types, in case of present of display type array, the subviews of the layout can be any view, and the number of visible items would be equal to number of item in DisplayType array. It means that the layout would only display the views that has one representation display type inside the DisplayType array.
 	public init(templates: [DisplayType]? = nil) {
 		self.templates = templates
 	}
@@ -40,28 +40,28 @@ public struct HorizontalTileLayout: Layout {
 	}
 
 	
-	public typealias Cache = (standardSquare: CGSize, minimumSqaure: CGSize)
+	public typealias Cache = (standardSquare: CGSize, minimumSquare: CGSize)
 
-	/// Caclulates and returns the size of the standard square
-	/// - Parameter minimumSqaureSize: size of the smallest displayable sqaure in the layout. This is the size of one of the sqaures in **halfSqure** display type and ``BlockTile``.
-	/// - Returns: the size of the standard sqaure. This size will be use for displaying the **Sqaure** display type and ``StandardSqaureTile``
-	func standardSqaureSize(from minimumSqaureSize: CGSize) -> CGSize {
-		return CGSize(width: minimumSqaureSize.width * 2, height: minimumSqaureSize.height * 2)
+	/// Calculates and returns the size of the standard square
+	/// - Parameter minimumSquareSize: size of the smallest displayable square in the layout. This is the size of one of the squares in **halfSquare** display type and ``BlockTile``.
+	/// - Returns: the size of the standard square. This size will be use for displaying the **Square** display type and ``StandardSquareTile``
+	func standardSquareSize(from minimumSquareSize: CGSize) -> CGSize {
+		return CGSize(width: minimumSquareSize.width * 2, height: minimumSquareSize.height * 2)
 	}
 
 
-	/// Generates the cache to improve the layouting performance.
+	/// Generates the cache to improve the layout performance.
 	/// - Parameter subviews: list of subviews
-	/// - Returns: cache, which is the size of the minimumSqaure and the standardSqaure
+	/// - Returns: cache, which is the size of the minimumSquare and the standardSquare
 	public func makeCache(subviews: Subviews) -> Cache {
-		let minimumSqaureSize = minimumSqaureSize(toFit: subviews)
-		let standardSqaureSize = standardSqaureSize(from: minimumSqaureSize)
+		let minimumSquareSize = minimumSquareSize(toFit: subviews)
+		let standardSquareSize = standardSquareSize(from: minimumSquareSize)
 
-		return (standardSqaureSize, minimumSqaureSize)
+		return (standardSquareSize, minimumSquareSize)
 	}
 
 
-	/// Calculates the smallest subview's height. This height indicates the height of the sqaure in **halfSqure** display type and ``BlockTile``.
+	/// Calculates the smallest subview's height. This height indicates the height of the square in **halfSquare** display type and ``BlockTile``.
 	/// - Parameter sizes: list of sizes of the subviews
 	/// - Returns: height of the smallest tile in the layout
 	func minheight(of sizes: [CGSize]) -> CGFloat {
@@ -70,14 +70,14 @@ public struct HorizontalTileLayout: Layout {
 	}
 
 
-	/// Calculates the size of the layout. the height of the layout would be equal to the height of a standard sqaure which will be calculated here **func standardSqaureSize(from minimumSqaureSize: CGSize) -> CGSize** and the minimum required with for showing the items would be sum of all display types
+	/// Calculates the size of the layout. the height of the layout would be equal to the height of a standard square which will be calculated here **func standardSquareSize(from minimumSquareSize: CGSize) -> CGSize** and the minimum required with for showing the items would be sum of all display types
 	/// - Parameters:
 	///   - proposal: the size that parent view will propose to the layout
 	///   - templates: all the display types that will be shown
 	///   - cache: the cache
 	/// - Returns: minimum required size of the layout view
 	func sizeThatFitsTemplates(proposal: ProposedViewSize, templates: [DisplayType], cache: inout Cache) -> CGSize {
-		let (standardSqaureSize, minimumSqaureSize) = cache
+		let (standardSquareSize, minimumSquareSize) = cache
 		var isNextDouble: Bool = false
 		let widthNeeded = templates.map { tmp in
 			switch tmp {
@@ -90,18 +90,18 @@ public struct HorizontalTileLayout: Layout {
 					return 0
 				}
 				isNextDouble = true
-				return  minimumSqaureSize.height
+				return  minimumSquareSize.height
 			case .fullSquare:
 				isNextDouble = false
-				return standardSqaureSize.width
+				return standardSquareSize.width
 			}
 		}
 		.reduce(0.0, +)
 
-		return CGSize(width: widthNeeded, height: standardSqaureSize.height)
+		return CGSize(width: widthNeeded, height: standardSquareSize.height)
 	}
 
-	/// Calculates the size of the layout. the height of the layout would be equal to the height of a standard sqaure which will be calculated here **func standardSqaureSize(from minimumSqaureSize: CGSize) -> CGSize** and the minimum required with for showing the items would be sum of all display types
+	/// Calculates the size of the layout. the height of the layout would be equal to the height of a standard square which will be calculated here **func standardSquareSize(from minimumSquareSize: CGSize) -> CGSize** and the minimum required with for showing the items would be sum of all display types
 	/// - Parameters:
 	///   - proposal: the size that parent view will propose to the layout
 	///   - templates: all the subviews that will be shown
@@ -112,9 +112,9 @@ public struct HorizontalTileLayout: Layout {
 		return sizeThatFitsTemplates(proposal: proposal, templates: templates, cache: &cache)
 	}
 
-	/// Sqaures are bulding blocks of the view, minimum sqaure size that our layout can show is the
-	/// doubledColomns size
-	private func minimumSqaureSize(toFit subviews: Subviews) -> CGSize {
+	/// Squares are building blocks of the HorizontalTileLayout, the minimum square size that our layout can show is the
+	/// halfSquare size
+	private func minimumSquareSize(toFit subviews: Subviews) -> CGSize {
 		let sizes = sizes(of: subviews)
 		let minHeight = minheight(of: sizes)
 		return .init(width: minHeight, height: minHeight)
@@ -129,7 +129,7 @@ public struct HorizontalTileLayout: Layout {
 	/// - Returns: returns a list of the positions. Each item in this list represents the position of one subview in the layout view
 	func calculatePlaceSubviews(in bounds: CGRect, proposal: ProposedViewSize, templates: [DisplayType], cache: inout Cache) -> [CGRect] {
 		var calculatedPlaces: [CGRect] = []
-		let (standardSqaureSize, minimumSqaureSize) = cache
+		let (standardSquareSize, minimumSquareSize) = cache
 		var traversedX = bounds.minX
 		var nextCellInDoubledColumnPosition: CGPoint? = nil
 		templates.indices.forEach { templateIndex in
@@ -137,27 +137,27 @@ public struct HorizontalTileLayout: Layout {
 			let size: CGSize
 			switch templates[templateIndex] {
 			case .halfSquare:
-				size = CGSize(width: minimumSqaureSize.width, height: minimumSqaureSize.height)
+				size = CGSize(width: minimumSquareSize.width, height: minimumSquareSize.height)
 				if let nextSlotPoint = nextCellInDoubledColumnPosition {
 					point = nextSlotPoint
 					nextCellInDoubledColumnPosition = nil
 				} else {
-					point = CGPoint(x: traversedX + minimumSqaureSize.width.half, y: bounds.minY + minimumSqaureSize.height.half)
+					point = CGPoint(x: traversedX + minimumSquareSize.width.half, y: bounds.minY + minimumSquareSize.height.half)
 					nextCellInDoubledColumnPosition = point
-					nextCellInDoubledColumnPosition!.y = point.y + minimumSqaureSize.height
-					traversedX += minimumSqaureSize.width
+					nextCellInDoubledColumnPosition!.y = point.y + minimumSquareSize.height
+					traversedX += minimumSquareSize.width
 				}
 
 			case .full(let width):
 				nextCellInDoubledColumnPosition = nil
-				size = CGSize(width: width, height: standardSqaureSize.height)
+				size = CGSize(width: width, height: standardSquareSize.height)
 				point = CGPoint(x: traversedX + width.half, y: bounds.midY)
 				traversedX += width
 			case .fullSquare:
 				nextCellInDoubledColumnPosition = nil
-				size = CGSize(width: standardSqaureSize.width, height: standardSqaureSize.height)
-				point = CGPoint(x: traversedX + standardSqaureSize.width.half, y: bounds.minY + standardSqaureSize.height.half)
-				traversedX += standardSqaureSize.width
+				size = CGSize(width: standardSquareSize.width, height: standardSquareSize.height)
+				point = CGPoint(x: traversedX + standardSquareSize.width.half, y: bounds.minY + standardSquareSize.height.half)
+				traversedX += standardSquareSize.width
 			}
 			calculatedPlaces.append(CGRect(origin: point, size: size))
 		}
