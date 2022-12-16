@@ -16,6 +16,10 @@
 default_platform(:ios)
 
 lane :test do
-  scan(package_path: ".", devices: ["iPhone 14", "iPhone 14 Pro"], code_coverage: true, scheme: 'HorizontalTileLayout', result_bundle: true)
+  scan(package_path: ".", 
+    devices: ["iPhone 14", "iPhone 14 Pro"], 
+    code_coverage: true,
+    scheme: 'HorizontalTileLayout', 
+    result_bundle: true)
 end
 
