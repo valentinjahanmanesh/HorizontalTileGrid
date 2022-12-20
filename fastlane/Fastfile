@@ -37,7 +37,7 @@ lane :docbuild do
   PATH_TO_DOARCHIVE_FILE=DOCS_FOLDER+"/Build/Products/Debug-iphonesimulator/HorizontalTileGrid.doccarchive"
   PATH_TO_SAVE_FILES=BASE_DIRECTORY+"/docs"
   FileUtils.remove_dir(PATH_TO_SAVE_FILES, true)
-  URL_BASE_PATH="https://farshadjahanmanesh.github.io/HorizontalTileGrid/docs"
+  URL_BASE_PATH="HorizontalTileGrid"
   docc = sh('(xcrun --find docc)')
   sh(docc.strip + ' process-archive transform-for-static-hosting '+PATH_TO_DOARCHIVE_FILE + ' --output-path ' + PATH_TO_SAVE_FILES + ' --hosting-base-path ' + URL_BASE_PATH)
 end
