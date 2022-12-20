@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-public struct BlockTile<Content: View> : View {
+struct BlockTile<Content: View> : View {
 	@ViewBuilder var content: () -> Content
 	public init(@ViewBuilder builder: @escaping () -> Content) {
 		self.content = builder

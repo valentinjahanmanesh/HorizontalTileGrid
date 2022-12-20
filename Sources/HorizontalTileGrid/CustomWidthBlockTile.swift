@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-public struct CustomWidthBlockTile<Content: View> : View {
+struct CustomWidthBlockTile<Content: View> : View {
 	private var width: CGFloat
 	@ViewBuilder var content: ()->Content
 	public init(width: CGFloat, @ViewBuilder builder: @escaping () -> Content) {
