@@ -58,6 +58,7 @@ lane :docpush do
 end
 
 lane :pushall do |options|
+  sh('cd ..')
   sh('git add .')
   sh('git commit -m "' + options[:msg] + '"')
   sh('git push')
