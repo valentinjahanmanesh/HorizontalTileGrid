@@ -10,3 +10,4 @@ DerivedData/
 /fastlane/test_output
 /fastlane/report.xml
 .ruby-version
+/doc-build-temp

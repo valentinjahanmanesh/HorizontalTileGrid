@@ -19,7 +19,26 @@ lane :test do
   scan(package_path: ".", 
     devices: ["iPhone 14", "iPhone 14 Pro"], 
     code_coverage: true,
-    scheme: 'HorizontalTileLayout', 
+    scheme: 'HorizontalTileGrid', 
     result_bundle: true)
 end
+
+def directory_exists?(directory)
+  File.directory?(directory)
+end
+
+lane :docbuild do 
+  require 'fileutils'
+  BASE_DIRECTORY=Pathname.getwd.parent.to_s
+  DOCS_FOLDER=BASE_DIRECTORY+"/doc-build-temp"
+  FileUtils.remove_dir(DOCS_FOLDER, true)
+  puts "Deleting previous dir folder if exists: " + DOCS_FOLDER
+  sh('cd ..; xcodebuild docbuild -scheme HorizontalTileGrid -derivedDataPath ' + DOCS_FOLDER + ' -destination "platform=iOS Simulator,OS=16.1,name=iPhone 14 Plus"')
+  PATH_TO_DOARCHIVE_FILE=DOCS_FOLDER+"/Build/Products/Debug-iphonesimulator/HorizontalTileGrid.doccarchive"
+  PATH_TO_SAVE_FILES=BASE_DIRECTORY+"/docs"
+  URL_BASE_PATH="https://github.com/farshadjahanmanesh/HorizontalTileGrid"
+  docc = sh('(xcrun --find docc)')
+  sh(docc.strip + ' process-archive transform-for-static-hosting '+PATH_TO_DOARCHIVE_FILE + ' --output-path ' + PATH_TO_SAVE_FILES + ' --hosting-base-path ' + URL_BASE_PATH)
+end
+
 
