@@ -14,6 +14,6 @@ public struct FullBlockTile<Content: View> : View {
 
 	public var body: some View {
 		content()
-			.layoutValue(key: BlockTypeKey.self, value: .full)
+			.layoutValue(key: BlockTypeKey.self, value: .block)
 	}
 }

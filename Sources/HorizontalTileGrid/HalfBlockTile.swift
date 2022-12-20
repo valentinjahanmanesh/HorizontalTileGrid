@@ -15,6 +15,6 @@ public struct HalfBlockTile<Content: View> : View {
 
 	public var body: some View {
 		content()
-			.layoutValue(key: BlockTypeKey.self, value: .block)
+			.layoutValue(key: BlockTypeKey.self, value: .double)
 	}
 }

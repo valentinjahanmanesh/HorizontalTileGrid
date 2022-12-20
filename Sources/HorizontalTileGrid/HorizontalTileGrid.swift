@@ -6,25 +6,24 @@
 //
 
 import SwiftUI
-/// HorizontalTileGrid layouts it's subviews horizontally based on the subview display type. if no height is provided to HorizontalTileGrid, the height of the list would be equal to the biggest subview and the with of this layout would be equal to the sum of all display type widths.
-/// There are three ``BlockType``:
+/// HorizontalTileGrid layouts it's subviews horizontally based on given block types. if no height is provided for HorizontalTileGrid, its height would be equal to the biggest subview and the its width would be calculated as big as the total size of the block types. the simples block type is ``BlockType``.block that is a square that fills its side fills the HorizontalTileGrid's height.
+///
+/// ``BlockType`` supported by HorizontalTileGrid are `block`, `double`, and `blockCustom`
 ///
 ///
-/// **fullCustom(width: CGFloat) block**:
-/// 	This subview will have a custom width. it will fill the HorizontalTileGrid and a width equal to the provided value.
-///
-/// **half block**:
-/// 	If a subview is of type HalfSquare, Layout divides the available height in half and places the item on top or bottom space based on the order of appearance of the item in list. Layout would always start from top half, places the subview on the top half and goes to the next view, if the next item is a another half again, the layout places the new item in the bottom half, but if the next item is not of half display type, the bottom half would be empty
-///
-///	**full block**:
-///		This display type is a standard square and provides a space of Width=Height=HorizontalTileGrid height.
-/// 
+///     ------------- HorizontalTileGrid ---------------------
+///		|           |  D  |                      |  D  |  D  |
+///		|           |  01 |                      |  01 |  01 |
+///		|   Block   |-----| BlockWithCustomWidth |-----|-----|
+///		|           |  D  |                      |  D  |  D  |
+///		|           |  02 |                      |  02 |  02 |
+///     ------------- HorizontalTileGrid ---------------------
 public struct HorizontalTileGrid: Layout {
 	private let blocks: [BlockType]?
 
 
 	/// Initialize the layout with an optional array of the display types. if the arrays is null, the layout expects it's subviews to be one of these three views ``HalfBlockTile``, ``CustomWidthBlockTile``, ``FullBlockTile`` or a custom view with ``BlockTypeKey`` LayoutValueKey.
-	/// - Parameter blocks: an optional array of block types, in case of the presence of a display type array, the subviews of the layout can be any view, and the number of visible items would be equal to the number of items in the BlockType array. It means that the layout would only display the views that have one representation display type inside the BlockType array.
+	/// - Parameter blocks: an optional array of double types, in case of the presence of a display type array, the subviews of the layout can be any view, and the number of visible items would be equal to the number of items in the BlockType array. It means that the layout would only display the views that have one representation display type inside the BlockType array.
 	public init(blocks: [BlockType]? = nil) {
 		self.blocks = blocks
 	}
@@ -77,21 +76,13 @@ public struct HorizontalTileGrid: Layout {
 	/// - Returns: minimum required size of the layout view
 	func sizeThatFitsBlocks(proposal: ProposedViewSize, blocks: [BlockType], cache: inout Cache) -> CGSize {
 		let (standardSquareSize, minimumSquareSize) = cache
-		var isNextABlock: Bool = false
 		let widthNeeded = blocks.map { tmp in
 			switch tmp {
-			case .fullCustom(let width):
-				isNextABlock = false
+			case .blockCustom(let width):
 				return width
-			case .block:
-				if isNextABlock {
-					isNextABlock = false
-					return 0
-				}
-				isNextABlock = true
+			case .double:
 				return  minimumSquareSize.height
-			case .full:
-				isNextABlock = false
+			case .block:
 				return standardSquareSize.width
 			}
 		}
@@ -130,30 +121,27 @@ public struct HorizontalTileGrid: Layout {
 		var calculatedPlaces: [CGRect] = []
 		let (standardSquareSize, minimumSquareSize) = cache
 		var traversedX = bounds.minX
-		var nextCellInDoubledColumnPosition: CGPoint? = nil
+
 		blocks.indices.forEach { blockIndex in
 			let point: CGPoint
 			let size: CGSize
 			switch blocks[blockIndex] {
-			case .block:
+			case .double:
 				size = CGSize(width: minimumSquareSize.width, height: minimumSquareSize.height)
-				if let nextSlotPoint = nextCellInDoubledColumnPosition {
-					point = nextSlotPoint
-					nextCellInDoubledColumnPosition = nil
-				} else {
-					point = CGPoint(x: traversedX + minimumSquareSize.width.half, y: bounds.minY + minimumSquareSize.height.half)
-					nextCellInDoubledColumnPosition = point
-					nextCellInDoubledColumnPosition!.y = point.y + minimumSquareSize.height
-					traversedX += minimumSquareSize.width
-				}
+				// Bottom Cell
+				point = CGPoint(x: traversedX + minimumSquareSize.width.half, y: bounds.minY + minimumSquareSize.height.half + minimumSquareSize.height)
 
-			case .fullCustom(let width):
-				nextCellInDoubledColumnPosition = nil
+				// Top Cell
+				var topCellPoint = point
+				topCellPoint.y = point.y - minimumSquareSize.height
+
+				traversedX += minimumSquareSize.width
+				calculatedPlaces.append(CGRect(origin: topCellPoint, size: size))
+			case .blockCustom(let width):
 				size = CGSize(width: width, height: standardSquareSize.height)
 				point = CGPoint(x: traversedX + width.half, y: bounds.midY)
 				traversedX += width
-			case .full:
-				nextCellInDoubledColumnPosition = nil
+			case .block:
 				size = CGSize(width: standardSquareSize.width, height: standardSquareSize.height)
 				point = CGPoint(x: traversedX + standardSquareSize.width.half, y: bounds.minY + standardSquareSize.height.half)
 				traversedX += standardSquareSize.width

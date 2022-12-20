@@ -16,6 +16,6 @@ public struct CustomWidthBlockTile<Content: View> : View {
 
 	public var body: some View {
 		content()
-			.layoutValue(key: BlockTypeKey.self, value: .fullCustom(width: width))
+			.layoutValue(key: BlockTypeKey.self, value: .blockCustom(width: width))
 	}
 }
