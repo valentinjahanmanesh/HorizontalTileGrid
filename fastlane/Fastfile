@@ -58,8 +58,10 @@ lane :docpush do
 end
 
 lane :pushall do |options|
-  sh('cd ..')
-  sh('git add .')
-  sh('git commit -m "' + options[:msg] + '"')
-  sh('git push')
+  BASE_DIRECTORY=Pathname.getwd.parent
+  Dir.chdir(BASE_DIRECTORY) do
+    sh('git add .')
+    sh('git commit -m "' + options[:msg] + '"')
+    sh('git push')
+  end
 end
