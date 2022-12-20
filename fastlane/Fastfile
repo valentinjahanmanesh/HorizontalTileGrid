@@ -56,5 +56,5 @@ lane :docpush do
   docbuild
   sh('git add .')
   sh('git commit -m "doc: updates the documentations"')
-  sh('git push"')
+  sh('git push')
 end
