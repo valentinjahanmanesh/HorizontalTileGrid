@@ -36,7 +36,7 @@ lane :docbuild do
   sh('cd ..; xcodebuild docbuild -scheme HorizontalTileGrid -derivedDataPath ' + DOCS_FOLDER + ' -destination "platform=iOS Simulator,OS=16.1,name=iPhone 14 Plus"')
   PATH_TO_DOARCHIVE_FILE=DOCS_FOLDER+"/Build/Products/Debug-iphonesimulator/HorizontalTileGrid.doccarchive"
   PATH_TO_SAVE_FILES=BASE_DIRECTORY+"/docs"
-  URL_BASE_PATH="https://github.com/farshadjahanmanesh/HorizontalTileGrid"
+  URL_BASE_PATH="https://farshadjahanmanesh.github.io/HorizontalTileGrid/"
   docc = sh('(xcrun --find docc)')
   sh(docc.strip + ' process-archive transform-for-static-hosting '+PATH_TO_DOARCHIVE_FILE + ' --output-path ' + PATH_TO_SAVE_FILES + ' --hosting-base-path ' + URL_BASE_PATH)
 end
