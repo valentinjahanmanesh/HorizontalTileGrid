@@ -25,7 +25,7 @@ public extension HorizontalTileGrid {
 		/// a double contains two small slot for two views, it divides the height of the HorizontalTileGrid in half and arranges the views horizontally from top to bottom inside those two slots. each slot size would be (width = height = HorizontalTileGrid.height / 4).
 		case double
 
-		// this is a block but with custom width. Its height is equal to the HorizontalTileGrid but its width can be various based on the width value.
+		/// this is a block but with custom width. Its height is equal to the HorizontalTileGrid but its width can be various based on the width value.
 		case blockCustom(width: CGFloat)
 	}
 }

@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-/// HorizontalTileGrid layouts it's subviews horizontally based on given block types. if no height is provided for HorizontalTileGrid, its height would be equal to the biggest subview and the its width would be calculated as big as the total size of the block types. the simples block type is ``BlockType``.block that is a square that fills its side fills the HorizontalTileGrid's height.
+/// HorizontalTileGrid layouts it's subviews horizontally based on given block types. if no height is provided for HorizontalTileGrid, its height would be equal to the biggest subview and the its width would be calculated as big as the total size of the block types.
+/// the simplest block type is ``BlockType``.block that is a square that fills its side fills the HorizontalTileGrid's height.
 ///
 /// ``BlockType`` supported by HorizontalTileGrid are `block`, `double`, and `blockCustom`
 ///
@@ -22,7 +23,7 @@ public struct HorizontalTileGrid: Layout {
 	private let blocks: [BlockType]?
 
 
-	/// Initialize the layout with an optional array of the display types. if the arrays is null, the layout expects it's subviews to be one of these three views ``HalfBlockTile``, ``CustomWidthBlockTile``, ``FullBlockTile`` or a custom view with ``BlockTypeKey`` LayoutValueKey.
+	/// Initialize the layout with an optional array of the display types. if the arrays is null, the layout expects it's subviews to be one of these three views ``DoubleTile``, ``CustomWidthBlockTile``, ``BlockTile`` or a custom view with ``BlockTypeKey`` LayoutValueKey.
 	/// - Parameter blocks: an optional array of double types, in case of the presence of a display type array, the subviews of the layout can be any view, and the number of visible items would be equal to the number of items in the BlockType array. It means that the layout would only display the views that have one representation display type inside the BlockType array.
 	public init(blocks: [BlockType]? = nil) {
 		self.blocks = blocks
@@ -41,8 +42,8 @@ public struct HorizontalTileGrid: Layout {
 	public typealias Cache = (standardSquare: CGSize, minimumSquare: CGSize)
 
 	/// Calculates and returns the size of the standard square
-	/// - Parameter minimumSquareSize: size of the smallest displayable square in the layout. This is the size of one of the squares in **half** display type and ``HalfBlockTile``.
-	/// - Returns: the size of the standard square. This size will be use for displaying the **Square** display type and ``FullBlockTile``
+	/// - Parameter minimumSquareSize: size of the smallest displayable square in the layout. This is the size of one of the squares in **half** display type and ``DoubleTile``.
+	/// - Returns: the size of the standard square. This size will be use for displaying the **Square** display type and ``BlockTile``
 	func standardSquareSize(from minimumSquareSize: CGSize) -> CGSize {
 		return CGSize(width: minimumSquareSize.width * 2, height: minimumSquareSize.height * 2)
 	}
@@ -59,7 +60,7 @@ public struct HorizontalTileGrid: Layout {
 	}
 
 
-	/// Calculates the smallest subview's height. This height indicates the height of the square in **half** display type and ``HalfBlockTile``.
+	/// Calculates the smallest subview's height. This height indicates the height of the square in **half** display type and ``DoubleTile``.
 	/// - Parameter sizes: list of sizes of the subviews
 	/// - Returns: height of the smallest tile in the layout
 	func minimumHeight(of sizes: [CGSize]) -> CGFloat {
