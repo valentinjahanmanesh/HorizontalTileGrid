@@ -54,7 +54,11 @@ end
 
 lane :docpush do
   docbuild
+  pushall(msg:"doc: updates the documentations")
+end
+
+lane :pushall do |options|
   sh('git add .')
-  sh('git commit -m "doc: updates the documentations"')
+  sh('git commit -m "' + options[:msg] + '"')
   sh('git push')
 end
