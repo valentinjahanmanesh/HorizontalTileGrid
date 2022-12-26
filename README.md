@@ -35,9 +35,11 @@ To create a horizontal tile layout, use the HorizontalTileGrid view and pass it 
 By default, the views will be laid out horizontally with equal widths. You can customize the widths by passing a widths array to the HorizontalTileGrid view. For example:
 
 ```swift
-   public var restaurantsLayout: [HorizontalTileGrid.DisplayType] {
-		(0..<restaurants.count).map({_ in randomTile()})
-   }
+	public var restaurantsLayout: [HorizontalTileLayout.BlockType] {
+		(0..<restaurants.count).map({index in
+			index == 0 ? .fullCustom(width: 400) :
+			(index % 5 == 0 ? .full : .block)})
+	}
 ```
 
 In this example, "Item 1" will have a fixed width of 100 points, "Item 2" will have a flexible width that takes up the remaining space, and "Item 3" will have a fixed width of 200 points.
@@ -45,36 +47,13 @@ In this example, "Item 1" will have a fixed width of 100 points, "Item 2" will h
 You can also customize the spacing between the views by passing a spacing parameter to the HorizontalTileGrid view. For example:
 
 ```swift
-   private func randomTile() -> HorizontalTileGrid.DisplayType {
+
+	private func randomTile() -> HorizontalTileLayout.BlockType {
 		switch (0...2)
 			.randomElement() {
-		case 0: return .doubleInColumn
-		case 1: return .full(width: CGFloat((200...300).randomElement()!))
-		default: return .square
+		case 0: return .block
+		case 1: return .fullCustom(width: CGFloat((200...300).randomElement()!))
+		default: return .full
 		}
 	}
-```
-
-In this example, the
-
-```swift
-ScrollView(.horizontal) {
-    HorizontalTileGrid {
-        StandardSquareTile {
-            RestaurantItemView(food: restaurants[0])
-                .padding(1)
-        }
-
-        StandardSquareTile {
-            RestaurantItemView(food: restaurants[1])
-                .padding(1)
-        }
-
-        CustomTile(width: 300) {
-            RestaurantItemView(food: restaurants[2])
-                .padding(1)
-        }
-    }
-}
-.scrollIndicators(.hidden)
 ```
